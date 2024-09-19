@@ -10,8 +10,8 @@ const Navbar = ({ user }: { user: User | null }) => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" passHref>
-          <a className="text-white text-xl font-bold">Bookstore</a>
+        <Link href="/" passHref className="text-white text-xl font-bold">
+          Bookstore
         </Link>
         <div>
           {user ? (
@@ -26,11 +26,11 @@ const Navbar = ({ user }: { user: User | null }) => {
             </>
           ) : (
             <>
-              <Link href="/login" passHref>
-                <a className="text-white mr-4">ログイン</a>
+              <Link href="/login" passHref className="text-white mr-4">
+                ログイン
               </Link>
-              <Link href="/signup" passHref>
-                <a className="text-white">ユーザ登録</a>
+              <Link href="/signup" passHref className="text-white">
+                ユーザ登録
               </Link>
             </>
           )}
