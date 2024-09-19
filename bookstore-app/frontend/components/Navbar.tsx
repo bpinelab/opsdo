@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
+import { User } from "../types"; // User型をインポート
 
-const Navbar = ({ user }: { user: any }) => {
+const Navbar = ({ user }: { user: User | null }) => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
@@ -9,8 +10,8 @@ const Navbar = ({ user }: { user: any }) => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-white text-xl font-bold">
-          Bookstore
+        <Link href="/" passHref>
+          <a className="text-white text-xl font-bold">Bookstore</a>
         </Link>
         <div>
           {user ? (
@@ -25,11 +26,11 @@ const Navbar = ({ user }: { user: any }) => {
             </>
           ) : (
             <>
-              <Link href="/login" className="text-white mr-4">
-                ログイン
+              <Link href="/login" passHref>
+                <a className="text-white mr-4">ログイン</a>
               </Link>
-              <Link href="/signup" className="text-white">
-                ユーザ登録
+              <Link href="/signup" passHref>
+                <a className="text-white">ユーザ登録</a>
               </Link>
             </>
           )}

@@ -1,11 +1,13 @@
+import "../styles/globals.css";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import Navbar from "../components/Navbar"; // Navbarコンポーネントのインポート
+import Navbar from "../components/Navbar";
+import { User } from "../types"; // User型をインポート
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Navbar user={user} /> {/* Navbarコンポーネントの使用 */}
+      <Navbar user={user} />
       <Component {...pageProps} />
     </>
   );
