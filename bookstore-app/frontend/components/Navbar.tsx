@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
-import { User } from "../types"; // User型をインポート
+import { User } from "@supabase/auth-js";
 
 const Navbar = ({ user }: { user: User | null }) => {
   const handleLogout = async () => {
