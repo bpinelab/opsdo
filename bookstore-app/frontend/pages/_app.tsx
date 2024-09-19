@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabaseClient";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
-import { User } from "../types"; // User型をインポート
+import { User } from "@supabase/auth-js";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);
