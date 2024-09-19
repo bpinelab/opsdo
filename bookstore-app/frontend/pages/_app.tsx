@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { AppProps } from "next/app";
 import { useRouter } from "next/router";
-import Navbar from "../components/Navbar";
 import { User } from "@supabase/auth-js";
+import Navbar from "../components/Navbar";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);
