@@ -5,9 +5,11 @@ import { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { User } from "@supabase/auth-js";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         data: { session },
       } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
+      setLoading(false); // 認証状態の確認が完了したらローディングを終了
     };
 
     getSession();
@@ -23,6 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUser(session?.user ?? null);
+        setLoading(false); // 認証状態の確認が完了したらローディングを終了
       }
     );
 
@@ -33,18 +37,35 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if (
+      !loading &&
       !user &&
       router.pathname !== "/login" &&
-      router.pathname !== "/signup"
+      router.pathname !== "/signup" &&
+      router.pathname !== "/privacy-policy"
     ) {
       router.push("/login");
     }
-  }, [user, router]);
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <div>Loading...</div>; // ローディング中の表示
+  }
+
+  if (
+    !user &&
+    router.pathname !== "/login" &&
+    router.pathname !== "/signup" &&
+    router.pathname !== "/privacy-policy"
+  ) {
+    return null; // 認証状態が確認されるまで何も表示しない
+  }
 
   return (
     <>
-      <Navbar user={user} />
+      {router.pathname !== "/privacy-policy" && <Navbar user={user} />}
       <Component {...pageProps} />
+      {router.pathname !== "/privacy-policy" && <Footer />}{" "}
+      {/* フッターコンポーネントを追加 */}
     </>
   );
 }
