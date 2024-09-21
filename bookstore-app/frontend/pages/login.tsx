@@ -23,7 +23,7 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
+    <div className="max-w-md mx-auto mt-24 p-6 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold mb-4">ログイン</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleLogin}>

@@ -1,14 +1,10 @@
-import { useRouter } from "next/router";
+interface PrivacyPolicyContentProps {
+  onClose: () => void;
+}
 
-const PrivacyPolicy = () => {
-  const router = useRouter();
-
-  const handleBackToHome = () => {
-    router.push("/");
-  };
-
+const PrivacyPolicyContent = ({ onClose }: PrivacyPolicyContentProps) => {
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div>
       <h1 className="text-2xl font-bold mb-4">プライバシーポリシー</h1>
       <p>
         当サイトは、ユーザーのプライバシーを尊重し、個人情報の保護に努めます。
@@ -41,14 +37,16 @@ const PrivacyPolicy = () => {
         プライバシーポリシーに関するお問い合わせは、以下の連絡先までお願いいたします。
       </p>
       <p>Email: support@xxx.xxx [this is a dummy address.]</p>
-      <button
-        onClick={handleBackToHome}
-        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
-      >
-        ホーム画面に戻る
-      </button>
+      <div className="flex justify-center">
+        <button
+          onClick={onClose}
+          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        >
+          閉じる
+        </button>
+      </div>
     </div>
   );
 };
 
-export default PrivacyPolicy;
+export default PrivacyPolicyContent;
