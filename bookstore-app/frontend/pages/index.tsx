@@ -30,8 +30,12 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const results = books.filter((book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = books.filter(
+      (book) =>
+        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.authors.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.blurb.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.publication_date.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredBooks(results);
   }, [searchTerm, books]);
