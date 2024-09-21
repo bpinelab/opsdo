@@ -74,12 +74,7 @@ const Home = () => {
             >
               {book.title}
             </Link>
-            <p>
-              著者:{" "}
-              {Array.isArray(book.authors)
-                ? book.authors.map((author) => author.name).join(", ")
-                : book.authors.name}
-            </p>
+            <p>著者: {book.authors.map((author) => author.name).join(", ")}</p>
             <p>出版日: {book.publication_date}</p>
             <p>{book.blurb}</p>
           </div>
