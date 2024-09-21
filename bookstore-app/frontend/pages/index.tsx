@@ -2,10 +2,22 @@ import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import Link from "next/link";
 
+interface Author {
+  name: string;
+}
+
+interface Book {
+  id: string;
+  title: string;
+  publication_date: string;
+  blurb: string;
+  authors: Author[];
+}
+
 const Home = () => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -21,8 +33,8 @@ const Home = () => {
       if (error) {
         console.error("Error fetching books:", error);
       } else {
-        setBooks(data);
-        setFilteredBooks(data);
+        setBooks(data as Book[]);
+        setFilteredBooks(data as Book[]);
       }
     };
 
@@ -33,7 +45,9 @@ const Home = () => {
     const results = books.filter(
       (book) =>
         book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.authors.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.authors.some((author) =>
+          author.name.toLowerCase().includes(searchTerm.toLowerCase())
+        ) ||
         book.blurb.toLowerCase().includes(searchTerm.toLowerCase()) ||
         book.publication_date.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -60,7 +74,12 @@ const Home = () => {
             >
               {book.title}
             </Link>
-            <p>著者: {book.authors.name}</p>
+            <p>
+              著者:{" "}
+              {Array.isArray(book.authors)
+                ? book.authors.map((author) => author.name).join(", ")
+                : book.authors.name}
+            </p>
             <p>出版日: {book.publication_date}</p>
             <p>{book.blurb}</p>
           </div>
