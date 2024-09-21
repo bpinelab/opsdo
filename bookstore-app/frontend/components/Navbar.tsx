@@ -8,7 +8,7 @@ const Navbar = ({ user }: { user: User | null }) => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
+    <nav className="bg-gray-800 p-4 fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link href="/" passHref className="text-white text-xl font-bold">
           Bookstore
