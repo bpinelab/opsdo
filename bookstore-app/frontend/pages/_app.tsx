@@ -63,14 +63,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {router.pathname !== "/privacy-policy" && <Navbar user={user} />}
-      <Component {...pageProps} />
-      {router.pathname !== "/privacy-policy" && <Footer />}{" "}
-      {/* フッターコンポーネントを追加 */}
+      <main className="flex-grow">
+        <Component {...pageProps} />
+      </main>
+      {router.pathname !== "/privacy-policy" && <Footer user={user} />}{" "}
+      {/* フッターコンポーネントにuserプロパティを渡す */}
       <Analytics />
       <SpeedInsights />
-    </>
+    </div>
   );
 }
 

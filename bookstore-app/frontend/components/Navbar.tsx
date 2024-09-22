@@ -1,67 +1,78 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
 import { User } from "@supabase/auth-js";
 
-const Navbar = ({ user }: { user: User | null }) => {
-  const [points, setPoints] = useState<number | null>(null);
+interface NavbarProps {
+  user: User | null;
+}
 
-  useEffect(() => {
-    const fetchUserPoints = async () => {
-      if (user) {
-        const { data, error } = await supabase
-          .from("points")
-          .select("points")
-          .eq("user_id", user.id)
-          .single();
-        if (error) {
-          console.error("Error fetching user points:", error);
-        } else {
-          setPoints(data.points);
-        }
-      }
-    };
-
-    fetchUserPoints();
-  }, [user]);
+const Navbar = ({ user }: NavbarProps) => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    window.location.reload();
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
   };
 
   return (
     <nav className="bg-gray-800 p-4 fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" passHref className="text-white text-xl font-bold">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link
+          href="/"
+          className="text-white text-lg font-bold"
+          onClick={handleMenuClose}
+        >
           Bookstore
         </Link>
-        <div>
-          {user ? (
-            <>
-              <span className="text-white mr-4">{user.email}</span>
-              <span className="text-white mr-4">
-                {points !== null
-                  ? `ポイント: ${points}`
-                  : "ポイント情報を取得中..."}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
+        {user ? (
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="text-white focus:outline-none"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                ログアウト
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/login" passHref className="text-white mr-4">
-                ログイン
-              </Link>
-              <Link href="/signup" passHref className="text-white">
-                ユーザ登録
-              </Link>
-            </>
-          )}
-        </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                ></path>
+              </svg>
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20">
+                <Link
+                  href="/account"
+                  className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  onClick={handleMenuClose}
+                >
+                  アカウント情報
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                >
+                  ログアウト
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link href="/login" className="text-white">
+            ログイン
+          </Link>
+        )}
       </div>
     </nav>
   );
