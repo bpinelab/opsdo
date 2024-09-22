@@ -122,16 +122,16 @@ const Account = () => {
             <h2 className="text-lg font-bold mb-4">
               購入を確定してよいですか？
             </h2>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-center space-x-4">
               <button
                 onClick={handleConfirmPurchase}
-                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                className="w-1/2 px-2 py-1 border border-green-500 text-green-500 rounded-md hover:bg-green-100"
               >
                 確定
               </button>
               <button
                 onClick={handleCancelPurchase}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                className="w-1/2 px-2 py-1 border border-red-500 text-red-500 rounded-md hover:bg-red-100"
               >
                 キャンセル
               </button>
