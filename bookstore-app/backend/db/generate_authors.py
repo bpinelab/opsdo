@@ -26,9 +26,10 @@ def generate_authors():
             "role": "user",
             "content": '''
             Generate a list of 10 fictional Japanese authors in JSON format.
-            Each author should have the following fields: name, gender, age, and background.
+            Each author should have the following fields: name, gender, birth_date, and background.
             Age should be a number.
             Each data should be written in Japanese, however, each field key should be written in English.
+            Name, gender, birth_date, background are recommended to be diverse and creative.
             '''
         }
     ]

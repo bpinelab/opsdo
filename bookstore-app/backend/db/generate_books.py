@@ -40,9 +40,11 @@ def generate_book_for_author():
             "role": "user",
             "content": '''
             Generate a fictional book with the following fields: 
-            title, content (minimum 1800 characters of the actual book text, which is part of the story), blurb (40 characters), and publication_date (between 1975 and 2023).
+            title, content (minimum 2048 characters of the actual book text, which is part of the story), blurb (40 characters), and publication_date (between 1975 and 2023).
             The content should be a part of the book's story, not a summary or description.
             The data should be in JSON format, and all fields should be in Japanese. Field keys should be in English.
+            The publication date should be later than its author's birth date.
+            The title should be creative and unique.
             '''
         }
     ]

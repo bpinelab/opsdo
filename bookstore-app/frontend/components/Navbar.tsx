@@ -1,8 +1,30 @@
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
 import { User } from "@supabase/auth-js";
 
 const Navbar = ({ user }: { user: User | null }) => {
+  const [points, setPoints] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserPoints = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from("points")
+          .select("points")
+          .eq("user_id", user.id)
+          .single();
+        if (error) {
+          console.error("Error fetching user points:", error);
+        } else {
+          setPoints(data.points);
+        }
+      }
+    };
+
+    fetchUserPoints();
+  }, [user]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
@@ -17,6 +39,11 @@ const Navbar = ({ user }: { user: User | null }) => {
           {user ? (
             <>
               <span className="text-white mr-4">{user.email}</span>
+              <span className="text-white mr-4">
+                {points !== null
+                  ? `ポイント: ${points}`
+                  : "ポイント情報を取得中..."}
+              </span>
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"

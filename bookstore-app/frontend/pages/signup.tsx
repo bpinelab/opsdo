@@ -1,21 +1,31 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useRouter } from "next/router";
+import Modal from "../components/Modal"; // モーダルコンポーネントをインポート
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの状態
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signUp({ email, password });
+    console.log("Signing up user...");
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) {
+      console.error("Error signing up:", error);
       setError(error.message);
     } else {
-      router.push("/login");
+      console.log("User signed up:", data);
+      setIsModalOpen(true); // モーダルを表示
     }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    router.push("/login"); // モーダルを閉じたらログイン画面に遷移
   };
 
   return (
@@ -50,6 +60,9 @@ const Signup = () => {
           サインアップ
         </button>
       </form>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <p>確認メールが送信されました。メールを確認してください。</p>
+      </Modal>
     </div>
   );
 };
