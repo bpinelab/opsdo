@@ -7,6 +7,7 @@ import { User } from "@supabase/auth-js";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);
@@ -68,6 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       {router.pathname !== "/privacy-policy" && <Footer />}{" "}
       {/* フッターコンポーネントを追加 */}
       <Analytics />
+      <SpeedInsights />
     </>
   );
 }
