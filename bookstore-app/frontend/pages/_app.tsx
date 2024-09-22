@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { User } from "@supabase/auth-js";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);
@@ -66,6 +67,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
       {router.pathname !== "/privacy-policy" && <Footer />}{" "}
       {/* フッターコンポーネントを追加 */}
+      <Analytics />
     </>
   );
 }
