@@ -61,7 +61,15 @@ const Signup = () => {
         </button>
       </form>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <p>確認メールが送信されました。メールを確認してください。</p>
+        <div className="w-11/12 md:w-1/2 lg:w-1/3 mx-auto p-6 bg-white">
+          <p>確認メールが送信されました。メールを確認してください。</p>
+          <button
+            onClick={handleCloseModal}
+            className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
+          >
+            閉じる
+          </button>
+        </div>
       </Modal>
     </div>
   );

@@ -10,6 +10,29 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPoints, setSelectedPoints] = useState<number>(1000);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  interface PointTransaction {
+    id: string;
+    transaction_date: string;
+    points_earned: number;
+    // Add other fields as necessary
+  }
+
+  const [pointTransactions, setPointTransactions] = useState<
+    PointTransaction[]
+  >([]);
+  interface BookTransaction {
+    id: string;
+    transaction_date: string;
+    points_used: number;
+    books: {
+      title: string;
+    };
+    // Add other fields as necessary
+  }
+
+  const [bookTransactions, setBookTransactions] = useState<BookTransaction[]>(
+    []
+  );
   const router = useRouter();
 
   useEffect(() => {
@@ -28,6 +51,38 @@ const Account = () => {
           console.error("Error fetching points:", error);
         } else {
           setPoints(pointsData.points);
+        }
+
+        const { data: pointTransactionsData, error: pointTransactionsError } =
+          await supabase
+            .from("transactions")
+            .select("*")
+            .eq("user_id", session.user.id)
+            .is("book_id", null);
+        if (pointTransactionsError) {
+          console.error(
+            "Error fetching point transactions:",
+            pointTransactionsError
+          );
+        } else {
+          setPointTransactions(pointTransactionsData);
+        }
+
+        const { data: bookTransactionsData, error: bookTransactionsError } =
+          await supabase
+            .from("transactions")
+            .select("*, books!inner(title)")
+            .eq("user_id", session.user.id)
+            .not("book_id", "is", null);
+        console.log("bookTransactionsData:", bookTransactionsData);
+        console.log("bookTransactionsError:", bookTransactionsError);
+        if (bookTransactionsError) {
+          console.error(
+            "Error fetching book transactions:",
+            bookTransactionsError
+          );
+        } else {
+          setBookTransactions(bookTransactionsData);
         }
       } else {
         router.push("/login");
@@ -75,7 +130,7 @@ const Account = () => {
         <h1 className="text-xl md:text-2xl font-bold mb-4">アカウント情報</h1>
         <p className="text-sm md:text-base">メールアドレス: {user.email}</p>
         <p className="text-sm md:text-base">
-          アカウント作成日: {user.created_at}
+          アカウント作成日: {new Date(user.created_at).toLocaleString()}
         </p>
         <p className="text-sm md:text-base">
           所持ポイント数: {points !== null ? points : "取得中..."}
@@ -107,6 +162,41 @@ const Account = () => {
           </button>
         </div>
       </div>
+
+      <div className="border border-gray-300 p-4 rounded-md mt-6">
+        <h2 className="text-lg md:text-xl font-bold mb-4">ポイント購入履歴</h2>
+        {pointTransactions.length > 0 ? (
+          <ul>
+            {pointTransactions.map((transaction) => (
+              <li key={transaction.id} className="mb-2 text-sm">
+                {new Date(transaction.transaction_date).toLocaleString()}:{" "}
+                {transaction.points_earned}ポイント
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>ポイント購入履歴がありません。</p>
+        )}
+      </div>
+
+      <div className="border border-gray-300 p-4 rounded-md mt-6">
+        <h2 className="text-lg md:text-xl font-bold mb-4">本の購入履歴</h2>
+        {bookTransactions.length > 0 ? (
+          <ul>
+            {bookTransactions.map((transaction) => (
+              <li key={transaction.id} className="mb-2 text-sm">
+                {/* {transaction.transaction_date}: {transaction.books.title} -{" "}
+                {transaction.points_used}ポイント */}
+                {new Date(transaction.transaction_date).toLocaleString()}:{" "}
+                {transaction.books.title} - {transaction.points_used}ポイント
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>本の購入履歴がありません。</p>
+        )}
+      </div>
+
       <div className="flex justify-center mt-6">
         <Link
           href="/"
@@ -122,6 +212,10 @@ const Account = () => {
             <h2 className="text-lg font-bold mb-4">
               購入を確定してよいですか？
             </h2>
+            <p className="mb-4">必要ポイント: {selectedPoints}</p>
+            <p className="mb-4">
+              保有ポイント: {points !== null ? points : "取得中..."}
+            </p>
             <div className="flex justify-center space-x-4">
               <button
                 onClick={handleConfirmPurchase}
