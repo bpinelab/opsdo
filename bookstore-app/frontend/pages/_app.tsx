@@ -38,12 +38,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    if (
+    const isMaintenanceMode =
+      process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+    if (isMaintenanceMode && router.pathname !== "/maintenance") {
+      router.push("/maintenance");
+    } else if (
       !loading &&
       !user &&
       router.pathname !== "/login" &&
       router.pathname !== "/signup" &&
-      router.pathname !== "/privacy-policy"
+      router.pathname !== "/privacy-policy" &&
+      router.pathname !== "/maintenance"
     ) {
       router.push("/login");
     }
@@ -53,11 +58,17 @@ function MyApp({ Component, pageProps }: AppProps) {
     return <div>Loading...</div>; // ローディング中の表示
   }
 
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  if (isMaintenanceMode && router.pathname !== "/maintenance") {
+    return null; // メンテナンスモードが有効な場合、メンテナンスページにリダイレクトされるまで何も表示しない
+  }
+
   if (
     !user &&
     router.pathname !== "/login" &&
     router.pathname !== "/signup" &&
-    router.pathname !== "/privacy-policy"
+    router.pathname !== "/privacy-policy" &&
+    router.pathname !== "/maintenance"
   ) {
     return null; // 認証状態が確認されるまで何も表示しない
   }

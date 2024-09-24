@@ -61,7 +61,7 @@ const Signup = () => {
         </button>
       </form>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className="w-11/12 md:w-1/2 lg:w-1/3 mx-auto p-6 bg-white">
+        <div className="w-11/12 md:w-3/4 lg:w-1/2 mx-auto p-6 bg-white">
           <p>確認メールが送信されました。メールを確認してください。</p>
           <button
             onClick={handleCloseModal}
